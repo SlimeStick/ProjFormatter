@@ -3,3 +3,5 @@
 
 # Absolute file paths
 
+# General files
+*.pyc
