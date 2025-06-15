@@ -1,6 +1,5 @@
-from ProjFormatter.trees.xml_tree import XMLTree
-
 from ProjFormatter.tree_traversers.level_order_traversal import LevelOrderTraverser
+from ProjFormatter.trees.xml_tree import XMLTree
 
 
 class VCXProjTree(XMLTree):
@@ -15,14 +14,13 @@ class VCXProjTree(XMLTree):
                 project_configurations.append(element.attrib["Include"])
         return project_configurations
 
-
     def check_format_sanity(
-        self,
-        check_wildcards: bool = True,
-        check_lists: bool = True,
-        check_order: bool = True,
-        check_macros: bool = True,
-        check_targets: bool = True
+            self,
+            check_wildcards: bool = True,
+            check_lists: bool = True,
+            check_order: bool = True,
+            check_macros: bool = True,
+            check_targets: bool = True
     ):
         """
         Makes sure that the tree is in the vcxproj format.

@@ -1,6 +1,7 @@
 from defusedxml import ElementTree
 from lxml import etree
 
+
 class XMLTree:
     def __init__(self, file_path: str):
         self.tree = ElementTree.parse(file_path)
