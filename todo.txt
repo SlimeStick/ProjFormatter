@@ -1,0 +1,19 @@
+1. Find ProjectConfigurations
+2. generate all possible sub groups of ProjectConfigurations
+3. Implementing merging function
+	Does a loop of merging: 
+		1. For non conditional items
+		2. For every possible subgroup
+	until no changes were made after a full loop.
+	The function calls 
+4. Vcxproj format validation (according to https://learn.microsoft.com/en-us/cpp/build/reference/vcxproj-file-structure?view=msvc-170)
+	a. The count and order of all must have tags (e.g. must have imports)
+	b. The existence of every ProjectConfiguration
+	c. No PropertyGroup without a Label before <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" /> 
+	d. No wild card usage
+	e. No macros in project items
+	f. No conditions in references
+	g. No conditions in reference metadata
+5. Add support for formatting based on a sln file (find vcxproj files based on the sln file)
+6. Remove overridden elements (Just a simple version, as we'd need to evaluate elements to be able to do it 100% of the time)
+7. Props formatting support
