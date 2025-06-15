@@ -32,10 +32,11 @@ def remove_elements_marked_for_removal(root: ElementTree):
                 parent.remove(child)
 
 
-def remove_empty_elements(root: ElementTree, remove_tags: list):
+def remove_empty_elements(root: ElementTree, element_names: list):
     """"
-    An empty element is an element which either has no content or contains only empty elements.
-    Elements with tags included in remove_tags are handled as empty elements.
+    Removes an element if it has not tags and no content and is in the element_names list.
+    Does not remove all empty elements because empty elements in vcxproj format can have the meaning to reset an
+    attribute.
     """
-    mark_empty_elements_for_removal(root, remove_tags)
+    mark_empty_elements_for_removal(root, element_names)
     remove_elements_marked_for_removal(root)
