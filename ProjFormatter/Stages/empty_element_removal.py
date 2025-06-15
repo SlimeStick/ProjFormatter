@@ -21,8 +21,6 @@ def mark_element_for_removal(element: ElementTree):
 
 def mark_empty_elements_for_removal(root: ElementTree, remove_tags: list):
     for element in root.iter():
-        if "ImportGroup" in element.tag:
-            print("b")
         if element.tag in remove_tags and is_empty_element(element):
             mark_element_for_removal(element)
 
@@ -37,7 +35,7 @@ def remove_elements_marked_for_removal(root: ElementTree):
 def remove_empty_elements(root: ElementTree, remove_tags: list):
     """"
     An empty element is an element which either has no content or contains only empty elements.
-    Only removes elements whose tag is included in remove_tags.
+    Elements with tags included in remove_tags are handled as empty elements.
     """
     mark_empty_elements_for_removal(root, remove_tags)
     remove_elements_marked_for_removal(root)

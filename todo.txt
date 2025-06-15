@@ -1,0 +1,21 @@
+2. Add tests
+3. Merge by item type
+4. Merge by conditions
+
+The reason I want to first merge by item types is because non conditional items can always be merged.
+If I have a situation like this:
+<ItemGroup>
+	<Item Condition release />
+<ItemGroup/>
+<ItemGroup>
+	<Item Condition debug />
+<ItemGroup/>
+
+I can only merge the release and debug AFTER I merged the ItemGroups themselves
+
+So I need to do a preorder traversal to merge things correctly, so implement preorder traversal class?
+
+Note that I can only merge them if they appear exatcly one after the other, if they have something in between them, merging could affect the outcome. In that case I'd have to make sure there are no $ % shenanigans before being able to merge despite the item in between. This is a really high step I will avoid for now.
+
+Also maybe I should replace the default iteritems usage with some class of mine because I don't know what traversal type it even is
+

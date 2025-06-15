@@ -1,6 +1,7 @@
+import os
 import setuptools
 
-with open("README.md", mode="r") as readme_file:
+with open(os.path.join("README.md"), mode="r") as readme_file:
     long_description = readme_file.read()
 
 with open("requirements.txt", mode="r") as requirements_file:
