@@ -1,11 +1,11 @@
-def remove_attributes(root, attributes_to_remove):
+def remove_attributes(root, attribute_names):
     """
     Removes specified attributes from all nodes in the XML tree.
     """
-    if not attributes_to_remove:
+    if not attribute_names:
         return
 
     for element in root.iter():
-        for attribute in attributes_to_remove:
+        for attribute in attribute_names:
             if attribute in element.attrib:
                 del element.attrib[attribute]
