@@ -3,5 +3,6 @@
 
 # Absolute file paths
 
-# General files
+# General files and folders
 *.pyc
+*.egg-info
