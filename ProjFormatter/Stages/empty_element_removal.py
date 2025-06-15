@@ -1,16 +1,5 @@
+from ProjFormatter.element_utils import get_children, is_empty_element
 from defusedxml import ElementTree
-
-
-def is_empty_element(element: ElementTree) -> bool:
-    # len returns the number of child elements
-    if len(element) != 0:
-        return False
-
-    # If there's any content inside the element besides white characters
-    if element.text is not None and element.text.strip():
-        return False
-
-    return True
 
 
 def remove_empty_elements(root: ElementTree, element_names: list):
@@ -20,6 +9,6 @@ def remove_empty_elements(root: ElementTree, element_names: list):
     attribute.
     """
     for parent in root.iter():
-        for child in list(parent):
+        for child in get_children(parent):
             if child.tag in element_names and is_empty_element(child):
                 parent.remove(child)

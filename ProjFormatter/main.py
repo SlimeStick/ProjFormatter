@@ -1,8 +1,6 @@
-from defusedxml import ElementTree
-
 from ProjFormatter.trees.vcxproj_tree import VCXProjTree
-
-from ProjFormatter.tree_traversers.depth_first_traversal import DepthFirstTraverser
+from ProjFormatter.element_utils import transfer_children
+from defusedxml import ElementTree
 
 
 def merge_conditional_elements_by_tag(element: ElementTree, tag: str):
@@ -31,5 +29,6 @@ def merge_conditional_elements(element: ElementTree, condition):
 
 if __name__ == "__main__":
     vcxproj_tree = VCXProjTree(r'C:\Users\david\ProjFormatter\Testing\example.vcxproj')
-
-    print(vcxproj_tree.get_project_configurations())
+    root = vcxproj_tree.root
+    transfer_children(root[0], root[1])
+    print(vcxproj_tree)
