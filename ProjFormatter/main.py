@@ -1,9 +1,8 @@
 from defusedxml import ElementTree
 
-from stages.attribute_removal import remove_attributes
-from tree_traversers.level_order_traversal import LevelOrderTraverser
-from stages.empty_element_removal import remove_empty_elements
-from xml_tree.xml_tree import XMLTree
+from ProjFormatter.trees.vcxproj_tree import VCXProjTree
+
+from ProjFormatter.tree_traversers.depth_first_traversal import DepthFirstTraverser
 
 
 def merge_conditional_elements_by_tag(element: ElementTree, tag: str):
@@ -31,17 +30,7 @@ def merge_conditional_elements(element: ElementTree, condition):
 
 
 if __name__ == "__main__":
-    # xml_tree = XMLTree('simple_example.vcxproj')
-    #
-    # remove_attributes(xml_tree.root, ["Label"])
-    # # remove_empty_elements(xml_tree.root, ["ImportGroup"])
-    #
-    # xml_tree.write_to_file('cleaned_file.xml')
-    #
-    # print(xml_tree)
+    vcxproj_tree = VCXProjTree(r'C:\Users\david\ProjFormatter\Testing\example.vcxproj')
 
-    # for element in LevelOrderTraverser(root):
-    # if element.tag == "{http://schemas.microsoft.com/developer/msbuild/2003}ProjectConfiguration":
-    #     root.remove(element)
-    # cleanup_namespace()
-    pass
+    for child in list(vcxproj_tree.root):
+        print(child)

@@ -13,7 +13,7 @@ class XMLTree:
         Remove the namespace prefix from all tags in the tree.
         """
         for element in root.iter():
-            element.tag = element.tag.split('}', 1)[-1]
+            element.tag = element.tag.split('}', 1)[1]
 
     def __convert_to_lxml(self, elem):
         """
