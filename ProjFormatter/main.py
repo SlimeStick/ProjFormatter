@@ -32,5 +32,4 @@ def merge_conditional_elements(element: ElementTree, condition):
 if __name__ == "__main__":
     vcxproj_tree = VCXProjTree(r'C:\Users\david\ProjFormatter\Testing\example.vcxproj')
 
-    for child in list(vcxproj_tree.root):
-        print(child)
+    print(vcxproj_tree.get_project_configurations())

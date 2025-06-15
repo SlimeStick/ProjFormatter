@@ -9,9 +9,11 @@ class VCXProjTree(XMLTree):
         self.check_format_sanity()
 
     def get_project_configurations(self):
+        project_configurations = []
         for element in LevelOrderTraverser(self.root, 2):
             if element.tag == 'ProjectConfiguration':
-                print(element)
+                project_configurations.append(element.attrib["Include"])
+        return project_configurations
 
 
     def check_format_sanity(
