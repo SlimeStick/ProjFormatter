@@ -1,5 +1,5 @@
 from ProjFormatter.trees.xml_tree import XMLTree
-from ProjFormatter.stages.empty_element_removal import remove_empty_elements
+from ProjFormatter.stages.remove_empty_elements import remove_empty_elements
 
 
 def test_sanity_remove_empty_elements():

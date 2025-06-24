@@ -1,5 +1,5 @@
 from ProjFormatter.trees.xml_tree import XMLTree
-from ProjFormatter.stages.attribute_removal import remove_attributes
+from ProjFormatter.stages.remove_attributes import remove_attributes
 
 
 def test_remove_attributes_sanity():
