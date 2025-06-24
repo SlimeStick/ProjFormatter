@@ -1,5 +1,5 @@
-from ProjFormatter.trees.vcxproj_tree import VCXProjTree
 from ProjFormatter.stages.merge_elements_of_same_type import merge_elements_of_same_type
+from ProjFormatter.trees.vcxproj_tree import VCXProjTree
 from defusedxml import ElementTree
 
 

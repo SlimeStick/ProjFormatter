@@ -1,5 +1,5 @@
-from ProjFormatter.trees.xml_tree import XMLTree
 from ProjFormatter.stages.remove_empty_elements import remove_empty_elements
+from ProjFormatter.trees.xml_tree import XMLTree
 
 
 def test_sanity_remove_empty_elements():
@@ -22,6 +22,7 @@ def test_empty_element_not_in_element_list():
         expected_outcome = file.read()
 
     assert expected_outcome == str(xml_tree)
+
 
 def test_no_empty_elements():
     xml_tree = XMLTree('test_no_empty_elements_files/input.xml')

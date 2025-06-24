@@ -1,5 +1,5 @@
-from ProjFormatter.trees.xml_tree import XMLTree
 from ProjFormatter.stages.remove_attributes import remove_attributes
+from ProjFormatter.trees.xml_tree import XMLTree
 
 
 def test_remove_attributes_sanity():
@@ -10,8 +10,8 @@ def test_remove_attributes_sanity():
     with open('test_remove_attributes_sanity_files/expected_outcome.xml', 'r') as file:
         expected_outcome = file.read()
 
-
     assert expected_outcome == str(xml_tree)
+
 
 def test_attributes_to_remove_do_not_appear_in_tree():
     xml_tree = XMLTree('test_attributes_to_remove_do_not_appear_in_tree_files/input.xml')

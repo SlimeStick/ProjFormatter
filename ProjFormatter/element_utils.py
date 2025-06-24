@@ -1,4 +1,5 @@
 import re
+
 from defusedxml import ElementTree
 
 
@@ -47,6 +48,7 @@ def are_elements_equal(elements: list[ElementTree]) -> bool:
 
 def are_elements_of_same_type(element1, element2):
     return element1.attrib == element2.attrib and element1.tag == element2.tag
+
 
 def are_relevant_elements(element1, element2, configurations=None, platforms=None):
     """
