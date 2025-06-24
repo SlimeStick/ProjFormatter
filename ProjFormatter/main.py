@@ -1,5 +1,5 @@
 from ProjFormatter.trees.vcxproj_tree import VCXProjTree
-from ProjFormatter.element_utils import transfer_children
+from ProjFormatter.stages.merge_elements_of_same_type import merge_elements_of_same_type
 from defusedxml import ElementTree
 
 
@@ -30,5 +30,5 @@ def merge_conditional_elements(element: ElementTree, condition):
 if __name__ == "__main__":
     vcxproj_tree = VCXProjTree(r'C:\Users\david\ProjFormatter\Testing\example.vcxproj')
     root = vcxproj_tree.root
-    transfer_children(root[0], root[1])
+    merge_elements_of_same_type(root)
     print(vcxproj_tree)
