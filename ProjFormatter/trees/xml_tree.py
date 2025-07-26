@@ -1,8 +1,8 @@
+from ProjFormatter.utils.element_utils import get_children, is_empty_element, get_child_count, \
+    are_elements_of_same_type, \
+    merge_children, are_relevant_elements
 from defusedxml import ElementTree
 from lxml import etree
-
-from utils.element_utils import get_children, is_empty_element, get_child_count, are_elements_of_same_type, \
-    merge_children, are_relevant_elements
 
 
 class XMLTree:
