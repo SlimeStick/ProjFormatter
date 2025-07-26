@@ -3,7 +3,7 @@ import codecs
 import os
 import re
 
-__all__ = ['Solution', 'parse']
+__all__ = ['Solution', 'SolutionFileError']
 
 
 class SolutionFileError(Exception):
