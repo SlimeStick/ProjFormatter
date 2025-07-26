@@ -23,7 +23,7 @@ class VCXProjTree(XMLTree):
                 project_configurations.append(element.attrib["Include"])
         return project_configurations
 
-    def check_project_configurations(self):
+    def check_project_configuration_combinations(self):
         """
         Checks that every combination of every configuration and platform defined in the vcxproj appears as a project
         configuration.
@@ -69,7 +69,7 @@ class VCXProjTree(XMLTree):
 
         # First we check the general rules that apply to all elements
         self.check_include_sanity()
-        self.check_project_configurations()
+        self.check_project_configuration_combinations()
         self.check_root_node()
 
         # Then we check the rules about the order of elements
