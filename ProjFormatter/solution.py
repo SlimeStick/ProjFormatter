@@ -1,6 +1,7 @@
 """Visual Studio Solution File."""
+import codecs
 import os
-import re, codecs
+import re
 
 __all__ = ['Solution', 'parse']
 
