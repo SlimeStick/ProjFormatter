@@ -1,11 +1,10 @@
-from ProjFormatter.tree_methods.remove_empty_elements import remove_empty_elements
 from ProjFormatter.trees.xml_tree import XMLTree
 
 
 def test_sanity_remove_empty_elements():
     xml_tree = XMLTree('test_sanity_remove_empty_elements_files/input.xml')
 
-    remove_empty_elements(xml_tree.root, ["ImportGroup"])
+    xml_tree.remove_empty_elements(["ImportGroup"])
 
     with open('test_sanity_remove_empty_elements_files/expected_outcome.xml', 'r') as file:
         expected_outcome = file.read()
@@ -16,7 +15,7 @@ def test_sanity_remove_empty_elements():
 def test_empty_element_not_in_element_list():
     xml_tree = XMLTree('test_empty_element_not_in_element_list_files/input.xml')
 
-    remove_empty_elements(xml_tree.root, ["NonExistentGroup"])
+    xml_tree.remove_empty_elements(["NonExistentGroup"])
 
     with open('test_empty_element_not_in_element_list_files/expected_outcome.xml', 'r') as file:
         expected_outcome = file.read()
@@ -27,7 +26,7 @@ def test_empty_element_not_in_element_list():
 def test_no_empty_elements():
     xml_tree = XMLTree('test_no_empty_elements_files/input.xml')
 
-    remove_empty_elements(xml_tree.root, ["ImportGroup"])
+    xml_tree.remove_empty_elements(["ImportGroup"])
 
     with open('test_no_empty_elements_files/expected_outcome.xml', 'r') as file:
         expected_outcome = file.read()
