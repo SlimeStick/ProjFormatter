@@ -43,6 +43,14 @@ class VCXProjTree(XMLTree):
                     raise ValueError("The IDE expects to find a project configuration for any combination of "
                                      "Configuration and Platform values used in all ProjectConfiguration items. ")
 
+    def check_root_node(self):
+        if self.root.tag != "Project":
+            raise ValueError("The root node must be a Project element")
+        if self.namespace != "http://schemas.microsoft.com/developer/msbuild/2003":
+            raise ValueError("The namespace must be 'http://schemas.microsoft.com/developer/msbuild/2003'")
+        if "DefaultTargets" not in self.root.attrib:
+            raise ValueError("The DefaultTargets attribute must be defined")
+
     def check_format_sanity(self):
         """
         Makes sure that the tree is in the vcxproj format.
@@ -62,6 +70,7 @@ class VCXProjTree(XMLTree):
         # First we check the general rules that apply to all elements
         self.check_include_sanity()
         self.check_project_configurations()
+        self.check_root_node()
 
         # Then we check the rules about the order of elements
 

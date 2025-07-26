@@ -15,8 +15,10 @@ class XMLTree:
         """
         Remove the namespace prefix from all tags in the tree.
         """
+        # Braces cannot be used in XML element names so it's safe to split using them to get the namespace
         for element in self.root.iter():
-            element.tag = element.tag.split('}', 1)[1]
+            self.namespace, element.tag = element.tag.split('}')
+        self.namespace = self.namespace.split('{')[1]
 
     @classmethod
     def __convert_to_lxml(cls, elem):
@@ -41,7 +43,7 @@ class XMLTree:
         lxml_root = self.__convert_to_lxml(self.root)
 
         # Add back the xmlns namespace declaration to the root element
-        lxml_root.attrib['xmlns'] = "http://schemas.microsoft.com/developer/msbuild/2003"
+        lxml_root.attrib['xmlns'] = self.namespace
 
         # Pretty-print the XML tree using lxml's method
         return etree.tostring(
