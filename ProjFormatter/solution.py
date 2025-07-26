@@ -123,8 +123,3 @@ class Solution(object):
             f.write("Global\r\n")
             f.write(self.globals)
             f.write("EndGlobal\r\n")
-
-
-def parse(filename):
-    """Parse solution file filename and return Solution instance."""
-    return Solution(filename)
