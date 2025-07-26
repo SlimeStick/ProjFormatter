@@ -18,7 +18,8 @@ class XMLTree:
         for element in self.root.iter():
             element.tag = element.tag.split('}', 1)[1]
 
-    def __convert_to_lxml(self, elem):
+    @classmethod
+    def __convert_to_lxml(cls, elem):
         """
         Recursively convert a defusedxml element to an lxml element.
         """
@@ -31,7 +32,7 @@ class XMLTree:
 
         # If the element has children, recurse through them
         for child in elem:
-            lxml_child = self.__convert_to_lxml(child)
+            lxml_child = cls.__convert_to_lxml(child)
             lxml_elem.append(lxml_child)
 
         return lxml_elem
