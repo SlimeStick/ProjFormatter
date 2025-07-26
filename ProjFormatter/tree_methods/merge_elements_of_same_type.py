@@ -1,5 +1,5 @@
 from ProjFormatter.utils.element_utils import (get_children, get_child_count, merge_children, are_elements_of_same_type,
-                                         are_relevant_elements)
+                                               are_relevant_elements)
 
 
 def merge_elements_of_same_type(root):
