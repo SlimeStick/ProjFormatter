@@ -1,5 +1,5 @@
 """Visual Studio Solution File."""
-
+import os
 import re, codecs
 
 __all__ = ['Solution', 'parse']
@@ -78,6 +78,11 @@ class Solution(object):
     def project_files(self):
         """List project files (.vcxproj.) in solution."""
         return map(lambda p: p[2], self.projects)
+
+    def project_files_absolute_paths(self):
+        """List absolute paths of project files (.vcxproj.) in solution."""
+        solution_dir = os.path.dirname(self.filename)
+        return map(lambda p: os.path.join(solution_dir, p[2]), self.projects)
 
     def project_names(self):
         """List project files (.vcxproj.) in solution."""
