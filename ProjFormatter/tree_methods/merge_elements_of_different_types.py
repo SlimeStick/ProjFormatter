@@ -4,7 +4,7 @@ from typing import Any
 from ProjFormatter.element_utils import get_children, get_child_count
 from defusedxml import ElementTree
 
-from element_utils import are_elements_equal
+from utils.element_utils import are_elements_equal
 
 
 def _generate_subgroups_as_lists(lst: list[Any]) -> list[tuple[Any, ...]]:

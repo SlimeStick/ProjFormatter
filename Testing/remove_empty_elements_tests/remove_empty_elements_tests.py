@@ -1,4 +1,4 @@
-from ProjFormatter.stages.remove_empty_elements import remove_empty_elements
+from ProjFormatter.tree_methods.remove_empty_elements import remove_empty_elements
 from ProjFormatter.trees.xml_tree import XMLTree
 
 

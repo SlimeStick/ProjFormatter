@@ -1,4 +1,4 @@
-from ProjFormatter.stages.remove_attributes import remove_attributes
+from ProjFormatter.tree_methods.remove_attributes import remove_attributes
 from ProjFormatter.trees.xml_tree import XMLTree
 
 
