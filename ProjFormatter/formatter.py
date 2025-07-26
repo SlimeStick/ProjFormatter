@@ -1,8 +1,8 @@
 import os.path
 
-from solution import Solution
-from trees.props_tree import PropsTree
-from trees.vcxproj_tree import VCXProjTree
+from ProjFormatter.solution import Solution
+from ProjFormatter.trees.props_tree import PropsTree
+from ProjFormatter.trees.vcxproj_tree import VCXProjTree
 
 __all__ = ["format_file"]
 

@@ -1,5 +1,5 @@
 import argparse
-from formatter import format_file
+from ProjFormatter.formatter import format_file
 
 def main():
     parser = argparse.ArgumentParser(description="Recursively format vcxproj and props files.")

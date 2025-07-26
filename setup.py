@@ -17,5 +17,10 @@ setuptools.setup(
     author="David Khitrik",
     packages=setuptools.find_packages(),
     python_requires=">=3.8",
-    install_requires=requirements
+    install_requires=requirements,
+    entry_points={
+        'console_scripts': [
+            'projformatter=ProjFormatter.cli:main',
+        ],
+    },
 )

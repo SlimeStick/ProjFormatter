@@ -1,6 +1,10 @@
+import os.path
+
 from ProjFormatter.tree_methods.merge_elements_of_same_type import merge_elements_of_same_type
 from ProjFormatter.trees.vcxproj_tree import VCXProjTree
 from defusedxml import ElementTree
+
+from ProjFormatter.solution import Solution
 
 
 def merge_conditional_elements_by_tag(element: ElementTree, tag: str):
@@ -28,7 +32,10 @@ def merge_conditional_elements(element: ElementTree, condition):
 
 
 if __name__ == "__main__":
-    vcxproj_tree = VCXProjTree(r'C:\Users\david\ProjFormatter\Testing\example.vcxproj')
-    root = vcxproj_tree.root
-    merge_elements_of_same_type(root)
-    print(vcxproj_tree)
+    # vcxproj_tree = VCXProjTree(r'C:\Users\david\ProjFormatter\Testing\example.vcxproj')
+    # root = vcxproj_tree.root
+    # merge_elements_of_same_type(root)
+    # print(vcxproj_tree)
+    sln = Solution(r"C:\Users\david\Desktop\Windows Kernel Pavel course\BeepFilter\Module8.sln")
+    for project in sln.project_files_absolute_paths():
+        print(project)
