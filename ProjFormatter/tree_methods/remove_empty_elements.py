@@ -1,4 +1,4 @@
-from ProjFormatter.element_utils import get_children, is_empty_element
+from ProjFormatter.utils.element_utils import get_children, is_empty_element
 from defusedxml import ElementTree
 
 

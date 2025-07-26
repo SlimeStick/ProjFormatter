@@ -1,4 +1,4 @@
-from ProjFormatter.element_utils import (get_children, get_child_count, merge_children, are_elements_of_same_type,
+from ProjFormatter.utils.element_utils import (get_children, get_child_count, merge_children, are_elements_of_same_type,
                                          are_relevant_elements)
 
 

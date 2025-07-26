@@ -1,7 +1,7 @@
 import itertools
 from typing import Any
 
-from ProjFormatter.element_utils import get_children, get_child_count
+from ProjFormatter.utils.element_utils import get_children, get_child_count
 from defusedxml import ElementTree
 
 from utils.element_utils import are_elements_equal
