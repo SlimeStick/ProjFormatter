@@ -108,6 +108,24 @@ class VCXProjTree(XMLTree):
                 return
         raise ValueError("Microsoft.Cpp.props wasn't imported")
 
+    def check_project_references(self):
+        """
+        Validates that the ProjectReferences elements are valid.
+        """
+        for child in get_children(self.root):
+            if child.tag != "ItemGroup":
+                continue
+            for grandchild in get_children(child):
+                if grandchild.tag != "ProjectReference":
+                    continue
+                if "Include" not in grandchild.attrib:
+                    raise ValueError("ProjectReference must have an Include attribute")
+                if "Condition" in grandchild.attrib:
+                    raise ValueError("ProjectReference don't support conditions")
+                for great_grandchild in get_children(grandchild):
+                    if "Condition" in great_grandchild.attrib:
+                        raise ValueError("ProjectReference metadata don't support conditions")
+
     def check_format_sanity(self):
         """
         Makes sure that the tree is in the vcxproj format.
@@ -123,6 +141,7 @@ class VCXProjTree(XMLTree):
         self.check_import_elements()
         self.check_microsoft_cpp_default_props()
         self.check_microsoft_cpp_props()
+        self.check_project_references()
 
         # More stuff we could check:
         #   . That ~stuff~ isn't used before Microsoft.Cpp.default.props is imported
@@ -133,8 +152,6 @@ class VCXProjTree(XMLTree):
         #   . Make sure that ItemGroup elements don't have conditions on them
         #   . Maybe make sure that settings in ItemGroup elements are replicated for each configuration? WTF?
         #   . Check that Include statements don't have wildcards or macros
-        #   . Make sure that references don't have conditions
-        #   . Make sure that reference metadata don't have conditions
 
     def remove_labels(self):
         """
