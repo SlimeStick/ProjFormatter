@@ -3,7 +3,6 @@ import os.path
 
 from ProjFormatter.formatter import format_file, recursive_format_dir
 
-
 def main():
     parser = argparse.ArgumentParser(description="Recursively format vcxproj and props files.")
     parser.add_argument("file", type=str,

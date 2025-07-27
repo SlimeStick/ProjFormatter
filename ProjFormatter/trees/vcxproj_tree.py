@@ -1,6 +1,8 @@
 from ProjFormatter.tree_traversers.level_order_traversal import LevelOrderTraverser
 from ProjFormatter.trees.xml_tree import XMLTree
 
+from ProjFormatter.utils.element_utils import get_children
+
 
 class VCXProjTree(XMLTree):
     def __init__(self, file_path: str):
@@ -22,6 +24,23 @@ class VCXProjTree(XMLTree):
             if element.tag == 'ProjectConfiguration':
                 project_configurations.append(element.attrib["Include"])
         return project_configurations
+
+    def check_project_configuration_elements(self):
+        for child in get_children(self.root):
+            if child.tag != "ItemGroup":
+                continue
+            for grandchild in get_children(child):
+                if grandchild.tag != 'ProjectConfiguration':
+                    continue
+                if "Include" not in grandchild.attrib:
+                    raise ValueError("ProjectConfiguration must have an Include attribute")
+                grandchild_tags = [grandchild.tag for grandchild in get_children(grandchild)]
+                if len(grandchild_tags) != 2:
+                    raise ValueError("ProjectConfiguration must have 2 children")
+                if not "Platform" in grandchild_tags:
+                    raise ValueError("ProjectConfiguration must a Platform child")
+                if not "Configuration" in grandchild_tags:
+                    raise ValueError("ProjectConfiguration must a Configuration child")
 
     def check_project_configuration_combinations(self):
         """
@@ -56,11 +75,11 @@ class VCXProjTree(XMLTree):
         Makes sure that the tree is in the vcxproj format.
         Should be called after editing the tree as according to Microsoft's documentation, manual editing mistakes can
         cause the IDE to crash or behave in unexpected ways.
+        Implemented so that format testing can be done without running MSBuild to check for mistakes and because even
+        MSBuild doesn't enforce all rules specified by Microsoft.
 
-        :param check_wildcards: Whether to check for wildcard usage in elements.
         :param check_lists: Whether to check for list usage in elements.
         :param check_order: Whether to validate elements order.
-        :param check_macros: Whether to check for macro usage in project item paths.
         :param check_targets: Whether to check that all targets are imported at the end of the file.
         """
         # There are 2 types of rules we check
@@ -69,6 +88,7 @@ class VCXProjTree(XMLTree):
 
         # First we check the general rules that apply to all elements
         self.check_include_sanity()
+        self.check_project_configuration_elements()
         self.check_project_configuration_combinations()
         self.check_root_node()
 
