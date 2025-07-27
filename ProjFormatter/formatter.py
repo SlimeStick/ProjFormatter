@@ -1,6 +1,5 @@
 import os.path
 
-from ProjFormatter.solution import Solution
 from ProjFormatter.trees.props_tree import PropsTree
 from ProjFormatter.trees.vcxproj_tree import VCXProjTree
 
@@ -14,10 +13,7 @@ def format_file(file_path: str):
     format.
     """
     file_extension = os.path.splitext(file_path)[1]
-    if file_extension == ".sln":
-        for project_path in Solution(file_path).project_files_absolute_paths():
-            format_file(project_path)
-    elif file_extension == ".vcxproj":
+    if file_extension == ".vcxproj":
         VCXProjTree(file_path).format()
     elif file_extension == ".props":
         PropsTree(file_path).format()
