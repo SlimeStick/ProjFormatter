@@ -151,7 +151,6 @@ class VCXProjTree(XMLTree):
         #   . Understand how TF Per-configuration ItemDefinitionGroup elements work
         #   . Make sure that ItemGroup elements don't have conditions on them
         #   . Maybe make sure that settings in ItemGroup elements are replicated for each configuration? WTF?
-        #   . Check that Include statements don't have wildcards or macros
 
     def remove_labels(self):
         """
