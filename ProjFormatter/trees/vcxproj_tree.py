@@ -18,14 +18,10 @@ class VCXProjTree(XMLTree):
                 raise ValueError("The Visual Studio C++ project system currently doesn't support macros in project item"
                                  " paths.")
 
-    def get_project_configurations(self):
-        project_configurations = []
-        for element in LevelOrderTraverser(self.root, 2):
-            if element.tag == 'ProjectConfiguration':
-                project_configurations.append(element.attrib["Include"])
-        return project_configurations
-
     def check_project_configuration_elements(self):
+        """
+        Checks that the ProjectConfiguration elements inside the Project's ItemGroups are valid.
+        """
         for child in get_children(self.root):
             if child.tag != "ItemGroup":
                 continue
@@ -41,6 +37,13 @@ class VCXProjTree(XMLTree):
                     raise ValueError("ProjectConfiguration must a Platform child")
                 if not "Configuration" in grandchild_tags:
                     raise ValueError("ProjectConfiguration must a Configuration child")
+
+    def get_project_configurations(self):
+        project_configurations = []
+        for element in LevelOrderTraverser(self.root, 2):
+            if element.tag == 'ProjectConfiguration':
+                project_configurations.append(element.attrib["Include"])
+        return project_configurations
 
     def check_project_configuration_combinations(self):
         """
@@ -63,12 +66,47 @@ class VCXProjTree(XMLTree):
                                      "Configuration and Platform values used in all ProjectConfiguration items. ")
 
     def check_root_node(self):
+        """
+        Checks that the root element is valid.
+        """
         if self.root.tag != "Project":
             raise ValueError("The root node must be a Project element")
         if self.namespace != "http://schemas.microsoft.com/developer/msbuild/2003":
             raise ValueError("The namespace must be 'http://schemas.microsoft.com/developer/msbuild/2003'")
         if "DefaultTargets" not in self.root.attrib:
             raise ValueError("The DefaultTargets attribute must be defined")
+
+    def check_import_elements(self):
+        """
+        Makes sure that all Import elements are valid.
+        """
+        for element in self.root.iter():
+            if element.tag != "Import":
+                continue
+            if "Project" not in element.attrib:
+                raise ValueError("An Import element must have a Project attribute")
+
+    def check_microsoft_cpp_default_props(self):
+        """
+        Makes sure that Microsoft.Cpp.default.props is imported.
+        """
+        for child in get_children(self.root):
+            if child.tag != 'Import':
+                continue
+            if child.attrib["Project"] == "$(VCTargetsPath)\Microsoft.Cpp.Default.props":
+                return
+        raise ValueError("Microsoft.Cpp.Default.props wasn't imported")
+
+    def check_microsoft_cpp_props(self):
+        """
+        Makes sure that Microsoft.Cpp.props is imported.
+        """
+        for child in get_children(self.root):
+            if child.tag != 'Import':
+                continue
+            if child.attrib["Project"] == "$(VCTargetsPath)\Microsoft.Cpp.props":
+                return
+        raise ValueError("Microsoft.Cpp.props wasn't imported")
 
     def check_format_sanity(self):
         """
@@ -78,17 +116,25 @@ class VCXProjTree(XMLTree):
         Implemented so that format testing can be done without running MSBuild to check for mistakes and because even
         MSBuild doesn't enforce all rules specified by Microsoft.
         """
-        # There are 2 types of rules we check
-        # 1. Rules that apply to all elements no matter where they are
-        # 2. Order rules
-
-        # First we check the general rules that apply to all elements
         self.check_include_sanity()
         self.check_project_configuration_elements()
         self.check_project_configuration_combinations()
         self.check_root_node()
+        self.check_import_elements()
+        self.check_microsoft_cpp_default_props()
+        self.check_microsoft_cpp_props()
 
-        # Then we check the rules about the order of elements
+        # More stuff we could check:
+        #   . That ~stuff~ isn't used before Microsoft.Cpp.default.props is imported
+        #   . That ~stuff~ isn't used before Microsoft.Cpp.props is imported
+        #   . That UserMacros don't change between configurations
+        #   . Understand how TF Per-configuration PropertyGroup elements work
+        #   . Understand how TF Per-configuration ItemDefinitionGroup elements work
+        #   . Make sure that ItemGroup elements don't have conditions on them
+        #   . Maybe make sure that settings in ItemGroup elements are replicated for each configuration? WTF?
+        #   . Check that Include statements don't have wildcards or macros
+        #   . Make sure that references don't have conditions
+        #   . Make sure that reference metadata don't have conditions
 
     def remove_labels(self):
         """
@@ -98,6 +144,6 @@ class VCXProjTree(XMLTree):
         self.remove_attributes(["Label"])
 
     def format(self):
-        # safe_empty_elements_to_remove = ["PropertyGroup", "ImportGroup", "ItemDefinitionGroup", "ClCompile", "Link",
-        #                                  "ItemGroup"]
-        pass
+        self.remove_labels()
+        self.remove_empty_elements(["PropertyGroup", "ImportGroup", "ItemDefinitionGroup", "ClCompile", "Link",
+                                    "ItemGroup"])
