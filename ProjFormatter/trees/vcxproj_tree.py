@@ -77,10 +77,6 @@ class VCXProjTree(XMLTree):
         cause the IDE to crash or behave in unexpected ways.
         Implemented so that format testing can be done without running MSBuild to check for mistakes and because even
         MSBuild doesn't enforce all rules specified by Microsoft.
-
-        :param check_lists: Whether to check for list usage in elements.
-        :param check_order: Whether to validate elements order.
-        :param check_targets: Whether to check that all targets are imported at the end of the file.
         """
         # There are 2 types of rules we check
         # 1. Rules that apply to all elements no matter where they are
@@ -102,5 +98,6 @@ class VCXProjTree(XMLTree):
         self.remove_attributes(["Label"])
 
     def format(self):
-        safe_empty_elements_to_remove = ["PropertyGroup", "ImportGroup", "ItemDefinitionGroup", "ClCompile", "Link",
-                                         "ItemGroup"]
+        # safe_empty_elements_to_remove = ["PropertyGroup", "ImportGroup", "ItemDefinitionGroup", "ClCompile", "Link",
+        #                                  "ItemGroup"]
+        pass

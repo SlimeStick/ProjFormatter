@@ -4,6 +4,6 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
   <ImportGroup/>
   <PropertyGroup>
-    <Bla>asda</Bla>
+    <Hello>hi</Hello>
   </PropertyGroup>
 </Project>

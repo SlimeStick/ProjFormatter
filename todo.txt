@@ -1,8 +1,8 @@
 1. Find ProjectConfigurations
-2. generate all possible sub groups of ProjectConfigurations
+2. generate all possible subgroups of ProjectConfigurations
 3. Implementing merging function
 	Does a loop of merging: 
-		1. For non conditional items
+		1. For non-conditional items
 		2. For every possible subgroup
 	until no changes were made after a full loop.
 	The function calls 
