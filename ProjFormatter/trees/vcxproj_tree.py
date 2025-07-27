@@ -143,7 +143,7 @@ class VCXProjTree(XMLTree):
         self.check_microsoft_cpp_props()
         self.check_project_references()
 
-        # More stuff we could check:
+        # TODO: More stuff we could check:
         #   . That ~stuff~ isn't used before Microsoft.Cpp.default.props is imported
         #   . That ~stuff~ isn't used before Microsoft.Cpp.props is imported
         #   . That UserMacros don't change between configurations
