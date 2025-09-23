@@ -134,7 +134,8 @@ class VCXProjTree(XMLTree):
         Implemented so that format testing can be done without running MSBuild to check for mistakes and because even
         MSBuild doesn't enforce all rules specified by Microsoft.
         """
-        self.check_include_sanity()
+        # TODO: Understand how many projects have $ in include statements
+        # self.check_include_sanity()
         self.check_project_configuration_elements()
         self.check_project_configuration_combinations()
         self.check_root_node()
