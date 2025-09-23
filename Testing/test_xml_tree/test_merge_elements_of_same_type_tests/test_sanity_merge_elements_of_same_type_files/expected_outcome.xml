@@ -2,9 +2,9 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="UserMacros">
     <A>
-      <B>1</B>
-      <B>2</B>
+      <B>b</B>
+      <B>b</B>
     </A>
-    <C>3</C>
+    <C>c</C>
   </PropertyGroup>
 </Project>

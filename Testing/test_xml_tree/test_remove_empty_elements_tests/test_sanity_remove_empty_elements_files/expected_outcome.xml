@@ -3,6 +3,6 @@
   <ItemGroup Label="ProjectConfigurations"/>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
   <PropertyGroup Label="UserMacros">
-    <Hello>hi</Hello>
+    <A>a</A>
   </PropertyGroup>
 </Project>
