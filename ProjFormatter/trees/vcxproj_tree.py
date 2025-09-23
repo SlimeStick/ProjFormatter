@@ -160,8 +160,17 @@ class VCXProjTree(XMLTree):
         """
         self.remove_attributes(["Label"])
 
+    def format_conditions(self):
+        """
+        Strips conditions so that it's easier to see when conditions are equal.
+        """
+        for element in self.root.iter():
+            if "Condition" in element.attrib:
+                element.attrib["Condition"] = element.attrib["Condition"].strip()
+
     def format(self):
         self.remove_labels()
+        self.format_conditions()
         # TODO: Improve removal so that it doesn't recursively remove all elements but removes them using a context
         #   So for example it won't remove all ImportGroup elements because that may mean something else in a special
         #   context of a tag we don't know about. Instead remove only ImportGroups that appear inside a Project tag.
