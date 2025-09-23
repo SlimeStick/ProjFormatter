@@ -3,6 +3,7 @@ import os.path
 
 from ProjFormatter.formatter import format_file, recursive_format_dir
 
+
 def main():
     parser = argparse.ArgumentParser(description="Recursively format vcxproj and props files.")
     parser.add_argument("file", type=str,
@@ -11,8 +12,10 @@ def main():
     args = parser.parse_args()
     if os.path.isfile(args.file):
         format_file(args.file)
-    else:
+    elif os.path.isdir(args.file):
         recursive_format_dir(args.file)
+    else:
+        raise ValueError("The given path is not a file or a directory.")
 
 
 if __name__ == "__main__":
