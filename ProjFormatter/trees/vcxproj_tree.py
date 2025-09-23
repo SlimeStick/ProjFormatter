@@ -93,7 +93,7 @@ class VCXProjTree(XMLTree):
         for child in get_children(self.root):
             if child.tag != 'Import':
                 continue
-            if child.attrib["Project"] == "$(VCTargetsPath)\Microsoft.Cpp.Default.props":
+            if child.attrib["Project"] == r"$(VCTargetsPath)\Microsoft.Cpp.Default.props":
                 return
         raise ValueError("Microsoft.Cpp.Default.props wasn't imported")
 
@@ -104,7 +104,7 @@ class VCXProjTree(XMLTree):
         for child in get_children(self.root):
             if child.tag != 'Import':
                 continue
-            if child.attrib["Project"] == "$(VCTargetsPath)\Microsoft.Cpp.props":
+            if child.attrib["Project"] == r"$(VCTargetsPath)\Microsoft.Cpp.props":
                 return
         raise ValueError("Microsoft.Cpp.props wasn't imported")
 
