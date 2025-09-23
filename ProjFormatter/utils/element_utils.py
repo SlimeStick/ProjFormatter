@@ -46,6 +46,10 @@ def are_elements_equal(elements: list[ElementTree]) -> bool:
     )
 
 
+def copy_element(element: ElementTree) -> ElementTree:
+    return ElementTree.fromstring(ElementTree.tostring(element))
+
+
 def are_elements_of_same_type(element1, element2):
     return element1.attrib == element2.attrib and element1.tag == element2.tag
 
