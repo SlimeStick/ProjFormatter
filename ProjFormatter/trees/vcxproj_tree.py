@@ -161,5 +161,8 @@ class VCXProjTree(XMLTree):
 
     def format(self):
         self.remove_labels()
+        # TODO: Improve removal so that it doesn't recursively remove all elements but removes them using a context
+        #   So for example it won't remove all ImportGroup elements because that may mean something else in a special
+        #   context of a tag we don't know about. Instead remove only ImportGroups that appear inside a Project tag.
         self.remove_empty_elements(["PropertyGroup", "ImportGroup", "ItemDefinitionGroup", "ClCompile", "Link",
                                     "ItemGroup"])
