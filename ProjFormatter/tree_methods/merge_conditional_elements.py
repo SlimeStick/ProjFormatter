@@ -13,6 +13,7 @@ def _generate_subgroups_as_lists(lst: list[Any]) -> list[tuple[Any, ...]]:
         subgroups.extend(itertools.combinations(lst, r))
     return subgroups
 
+
 def merge_conditional_elements(root):
     """
     What it does is find a group of subsequent elements that are all of the same type but different conditions, meaning
@@ -136,7 +137,12 @@ def merge_conditional_elements(root):
     </A>
 
     To make this feature possible we should get a dict called possible conditions which would hold a key condition word
-    and a list of possible values.
+    and a list of possible values. This should probably be the last part of this feature that I implement.
+    Actually, it could even be a separate thing. We can call it optimize conditions where it checks if a condition
+    covers all possible options, in which case the condition is just removed.
+    That way we also optimize cases where the user accidentally didn't optimize all conditions.
+    If we do it in a separate function, this function will generate unoptimized conditions, which isn't ideal,
+    but whatever, we will just call optimize conditions after this function.
     """
     current_children_to_merge = []
 
@@ -147,7 +153,7 @@ def merge_conditional_elements(root):
             current_children_to_merge.append(child)
             continue
 
-        # TODO: Check if attrib is a known configuration and if it is then allow it
+        # TODO: Check if current_children_to_merge[0].attrib is a known configuration and if it is then allow it
         if child.tag != current_children_to_merge[0].tag and child.attrib != current_children_to_merge[0].attrib:
             if get_child_count(current_children_to_merge) == 1:
                 current_children_to_merge = [child]
