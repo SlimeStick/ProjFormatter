@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <A Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <B>b</B>
+  </A>
+  <A Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <C>c</C>
+  </A>
+  <A Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <D>d</D>
+  </A>
+  <A Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <E>e</E>
+  </A>
+</Project>

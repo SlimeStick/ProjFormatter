@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <A Condition="'$(Platform)'='x64'">
+    <B>b</B>
+    <C>c</C>
+    <F>f</F>
+  </A>
+  <A Condition="'$(Platform)'='Win32'">
+    <B>b</B>
+    <D>d</D>
+    <F>f</F>
+  </A>
+</Project>
