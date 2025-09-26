@@ -1,11 +1,11 @@
 import itertools
-from typing import Sequence, Iterable, Any
+from typing import Sequence, Iterable, Any, Optional
 from xml.etree.ElementTree import Element
 
 from defusedxml import ElementTree
 
 from ProjFormatter.utils.dict_utils import dicts_equal_ignore_keys
-from ProjFormatter.utils.element_utils import get_children, get_child_count, are_relevant_elements, are_elements_equal, \
+from ProjFormatter.utils.element_utils import get_child_count, are_relevant_elements, are_elements_equal, \
     copy_element
 
 
@@ -25,29 +25,37 @@ def _merge_conditions(elements_with_conditions: Iterable[ElementTree]):
     return " || ".join(conditions_strings)
 
 
-def _merge_top_of_group(children_to_merge: Sequence[ElementTree]) -> ElementTree:
+def _merge_side_of_group(children_to_merge: Sequence[ElementTree], top: bool) -> Optional[ElementTree]:
+    """
+    Merge either top or bottom side of the group.
+    :param top: If True, merge the top side of the group.
+        If False, merge the bottom side of the group.
+    :return: The merged element.
+        None if no merge was done.
+    """
     merged_element = Element(children_to_merge[0].tag, attrib=children_to_merge[0].attrib)
     merged_element.attrib["Condition"] = _merge_conditions(children_to_merge)
 
-    grandchild_index = 0
+    if top:
+        merge_index = 0
+    else:
+        merge_index = -1
 
     while True:
         # One of the elements has run out of grandchildren to merge
-        if any(get_child_count(child_to_merge) <= grandchild_index for child_to_merge in children_to_merge):
+        if any(get_child_count(child_to_merge) == 0 for child_to_merge in children_to_merge):
             break
 
-        ith_grandchildren = [child_to_merge[grandchild_index] for child_to_merge in children_to_merge]
+        merge_index_grandchildren = [child_to_merge[merge_index] for child_to_merge in children_to_merge]
 
-        if are_elements_equal(ith_grandchildren):
-            # Move the common element to the merged result
-            merged_element.append(copy_element(ith_grandchildren[0]))
-
-            for child_to_merge in children_to_merge:
-                del child_to_merge[grandchild_index]
-                # grandchild_index is not incremented as the next element shifts into position
-        else:
-            # Found a mismatch, abort merge
+        if not are_elements_equal(merge_index_grandchildren):
+            # Found a unique grandchild, stop merging
             break
+
+        # Move the common element to the merged result
+        merged_element.append(copy_element(merge_index_grandchildren[0]))
+        for child_to_merge in children_to_merge:
+            child_to_merge.remove(child_to_merge[merge_index])
 
     if get_child_count(merged_element) > 0:
         return merged_element
@@ -95,7 +103,7 @@ def merge_conditional_elements(root: ElementTree):
     </A>
 
     And this is done for each subgroup too, not just the largest group, so out of a group of 4 we could get conditions
-    that are relevant only in 3 conditionals. Can that then break stuff.......? not sure.
+    that are relevant only in 3 conditionals. Can that then break stuff.......? it can't if we update the contents.
 
     So like let's say I have this case:
     <A Condition="'$(Platform)'='x64' || '$(Configuration)'='Debug'">
@@ -189,33 +197,23 @@ def merge_conditional_elements(root: ElementTree):
     If we do it in a separate function, this function will generate unoptimized conditions, which isn't ideal,
     but whatever, we will just call optimize conditions after this function.
     """
-    current_children_to_merge = None
+    current_children_to_merge = []
 
-    for child in get_children(root):
-        merge_conditional_elements(child)
+    for child_index in range(get_child_count(root)):
+        merge_conditional_elements(root[child_index])
 
-        # Found the first item of the current group
-        if not current_children_to_merge:
-            current_children_to_merge = [child]
-            continue
-
-        # Found another item for the current group
-        if _should_merge_elements(current_children_to_merge[0], child.tag):
-            current_children_to_merge.append(child)
+        if not current_children_to_merge or _should_merge_elements(current_children_to_merge[0], root[child_index].tag):
+            current_children_to_merge.append(root[child_index])
         else:
             # Found an item that cannot be part of the current group, searching stage done, merge the current group
-            if get_child_count(current_children_to_merge) != 1:
+            if len(current_children_to_merge) > 1:
                 for subgroup in _generate_subgroups_as_lists(current_children_to_merge):
-                    top_merged_element = _merge_top_of_group(subgroup)
-                    # None if there was nothing aggregate at the top
+                    top_merged_element = _merge_side_of_group(subgroup, True)
                     if top_merged_element:
-                        # Add to top of tree somehow
-                        pass
+                        root.insert(child_index, top_merged_element)
 
-                    bottom_merged_element = _merge_bottom_of_group(subgroup)
-                    # None if there was nothing aggregate at the bottom
+                    bottom_merged_element = _merge_side_of_group(subgroup, False)
                     if bottom_merged_element:
-                        # Add to bottom of tree somehow
-                        pass
+                        root.insert(child_index + len(current_children_to_merge), top_merged_element)
 
-            current_children_to_merge = [child]
+            current_children_to_merge = [root[child_index]]
