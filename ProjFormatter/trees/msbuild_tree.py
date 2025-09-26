@@ -1,12 +1,12 @@
 from typing import Sequence, Iterable, Optional
 from xml.etree.ElementTree import Element
+from ordered_set import OrderedSet
 
 from defusedxml import ElementTree
 
 from ProjFormatter.trees.xml_tree import XMLTree
 from ProjFormatter.utils.dict_utils import dicts_equal_ignore_keys
-from ProjFormatter.utils.element_utils import get_child_count, are_relevant_elements, are_elements_equal, \
-    copy_element
+from ProjFormatter.utils.element_utils import get_child_count, are_elements_equal, copy_element
 from ProjFormatter.utils.math_utils import generate_subgroups_as_lists
 
 
@@ -44,7 +44,7 @@ class MSBuildTree(XMLTree):
 
     @classmethod
     def _merge_conditions(cls, elements_with_conditions: Iterable[ElementTree]):
-        conditions = set([element.attrib["Condition"] for element in elements_with_conditions])
+        conditions = OrderedSet([element.attrib["Condition"] for element in elements_with_conditions])
         conditions_strings = ["({})".format(condition) for condition in conditions]
         return " || ".join(conditions_strings)
 
@@ -87,32 +87,40 @@ class MSBuildTree(XMLTree):
 
     @classmethod
     def _should_merge_elements(cls, element1: ElementTree, element2: ElementTree) -> bool:
-        return element1.tag == element2.tag and not are_relevant_elements(element1, element2) and \
+        return element1.tag == element2.tag and \
             dicts_equal_ignore_keys(element1.attrib, element2.attrib, ["Condition"])
+
+    @classmethod
+    def _merge_children(cls, root, current_children_to_merge, child_index):
+        if len(current_children_to_merge) > 1:
+            for subgroup in generate_subgroups_as_lists(current_children_to_merge):
+                top_merged_element = cls._merge_side_of_group(subgroup, True)
+                if top_merged_element:
+                    root.insert(child_index - len(current_children_to_merge), top_merged_element)
+                    child_index += 1
+
+                bottom_merged_element = cls._merge_side_of_group(subgroup, False)
+                if bottom_merged_element:
+                    root.insert(child_index, bottom_merged_element)
 
     @classmethod
     def _merge_conditional_elements(cls, root: ElementTree):
         current_children_to_merge = []
 
-        for child_index in range(get_child_count(root)):
+        child_index = 0
+        while child_index < get_child_count(root):
             cls._merge_conditional_elements(root[child_index])
 
             if not current_children_to_merge or cls._should_merge_elements(current_children_to_merge[0],
-                                                                           root[child_index].tag):
+                                                                           root[child_index]):
                 current_children_to_merge.append(root[child_index])
             else:
                 # Found an item that cannot be part of the current group, searching stage done, merge the current group
-                if len(current_children_to_merge) > 1:
-                    for subgroup in generate_subgroups_as_lists(current_children_to_merge):
-                        top_merged_element = cls._merge_side_of_group(subgroup, True)
-                        if top_merged_element:
-                            root.insert(child_index, top_merged_element)
-
-                        bottom_merged_element = cls._merge_side_of_group(subgroup, False)
-                        if bottom_merged_element:
-                            root.insert(child_index + len(current_children_to_merge), top_merged_element)
+                cls._merge_children(root, current_children_to_merge, child_index)
 
                 current_children_to_merge = [root[child_index]]
+            child_index += 1
+        cls._merge_children(root, current_children_to_merge, child_index)
 
     def merge_conditional_elements(self):
         """

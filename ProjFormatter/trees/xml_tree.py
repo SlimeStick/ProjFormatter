@@ -4,8 +4,7 @@ from defusedxml import ElementTree
 from lxml import etree
 
 from ProjFormatter.utils.element_utils import get_children, is_empty_element, get_child_count, \
-    are_elements_of_same_type, \
-    merge_children, are_relevant_elements
+    are_elements_of_same_type, merge_children, are_mutually_exclusive
 
 
 class XMLTree:
@@ -102,7 +101,7 @@ class XMLTree:
                 merge_children(root, child2, child1)
                 # Don't increment index as one child2 was deleted
             else:
-                if not are_relevant_elements(child1, child2):
+                if are_mutually_exclusive(child1, child2):
                     skip_index += 1
                 else:
                     index += 1
