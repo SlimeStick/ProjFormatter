@@ -1,7 +1,9 @@
-import re
-from typing import Sequence, Iterable
+from typing import Sequence
 
 from defusedxml import ElementTree
+
+__all__ = ["get_child_count", "get_children", "is_empty_element", "transfer_children", "merge_children",
+           "are_elements_equal", "copy_element", "are_elements_of_same_type", "are_mutually_exclusive"]
 
 
 def get_child_count(element: ElementTree) -> int:
@@ -55,27 +57,14 @@ def are_elements_of_same_type(element1: ElementTree, element2: ElementTree) -> b
     return element1.attrib == element2.attrib and element1.tag == element2.tag
 
 
-def are_relevant_elements(element1: ElementTree, element2: ElementTree, configurations: Iterable[str] = None,
-                          platforms: Iterable[str] = None):
+def are_mutually_exclusive(element1: ElementTree, element2: ElementTree, possible_values=None) -> bool:
     """
-    Returns whether either element can affect the other.
-    Currently, it doesn't evaluate XML properties,
-    so it's best-effort based on known cases of the Condition attribute.
+    Returns whether two elements are mutually exclusive by their Condition attribute.
     """
-    if configurations is None:
-        configurations = ["Debug", "Release"]
+    if "Condition" not in element1.attrib or "Condition" not in element2.attrib:
+        return False
 
-    if platforms is None:
-        platforms = ["x64", "Win32"]
+    if element1.attrib["Condition"] == element2.attrib["Condition"]:
+        return False
 
-    configurations = "|".join(configurations)
-    platforms = "|".join(platforms)
-
-    pattern = r"^'\$\((Configuration)\)\|\$\((Platform)\)'==('({})\|({})')$".format(configurations, platforms)
-    if re.match(pattern, element1.attrib.get("Condition", "")) is None:
-        return True
-
-    if re.match(pattern, element2.attrib.get("Condition", "")) is None:
-        return True
-
-    return element1.attrib["Condition"] == element2.attrib["Condition"]
+    return True
