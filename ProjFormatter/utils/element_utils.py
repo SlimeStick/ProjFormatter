@@ -57,9 +57,13 @@ def are_elements_of_same_type(element1: ElementTree, element2: ElementTree) -> b
     return element1.attrib == element2.attrib and element1.tag == element2.tag
 
 
-def are_mutually_exclusive(element1: ElementTree, element2: ElementTree, possible_values=None) -> bool:
+def are_mutually_exclusive(element1: ElementTree, element2: ElementTree) -> bool:
     """
-    Returns whether two elements are mutually exclusive by their Condition attribute.
+    :return: whether two elements are mutually exclusive by their Condition attribute.
+    :note: Doesn't evaluate most conditions, so many elements that aren't actually mutually exclusive get treated as
+        such. For example: Condition="'$(Platform)'=='x64'" and Condition="$(Platform)!='Win32" usually mean the same
+        thing and are not mutually exclusive, but this function treats them as such because it does not know all
+        possible values of Platform.
     """
     if "Condition" not in element1.attrib or "Condition" not in element2.attrib:
         return False
