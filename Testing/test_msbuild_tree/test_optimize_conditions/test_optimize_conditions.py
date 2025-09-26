@@ -84,8 +84,6 @@ def test_optimize_conditions_redundant_condition():
 
     msbuild_tree.optimize_conditions(possible_values={"Platform": []})
 
-    msbuild_tree.save_to_file("output.xml")
-
     with open(os.path.join(TEST_DIR, 'test_optimize_conditions_redundant_condition/expected_outcome.xml'), 'r') as file:
         expected_outcome = file.read()
 
@@ -97,8 +95,6 @@ def test_optimize_conditions_true():
 
     msbuild_tree.optimize_conditions(possible_values={"Platform": []})
 
-    msbuild_tree.save_to_file("output.xml")
-
     with open(os.path.join(TEST_DIR, 'test_optimize_conditions_true/expected_outcome.xml'), 'r') as file:
         expected_outcome = file.read()
 
@@ -109,8 +105,6 @@ def test_optimize_conditions_false():
     msbuild_tree = MSBuildTree(os.path.join(TEST_DIR, 'test_optimize_conditions_false/input.xml'))
 
     msbuild_tree.optimize_conditions(possible_values={"Platform": []})
-
-    msbuild_tree.save_to_file("output.xml")
 
     with open(os.path.join(TEST_DIR, 'test_optimize_conditions_false/expected_outcome.xml'), 'r') as file:
         expected_outcome = file.read()
