@@ -8,6 +8,11 @@ class VCXProjTree(MSBuildTree):
         super().__init__(file_path)
         self.check_format_sanity()
 
+    def check_root_node(self):
+        super().check_root_node()
+        if "DefaultTargets" not in self.root.attrib:
+            raise ValueError("The DefaultTargets attribute must be defined")
+
     def check_include_sanity(self):
         """
         Checks that the Include attributes in all elements don't contain macro usages.

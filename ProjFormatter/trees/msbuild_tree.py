@@ -26,8 +26,6 @@ class MSBuildTree(XMLTree):
             raise ValueError("The root node must be a Project element")
         if self.namespace != "http://schemas.microsoft.com/developer/msbuild/2003":
             raise ValueError("The namespace must be 'http://schemas.microsoft.com/developer/msbuild/2003'")
-        if "DefaultTargets" not in self.root.attrib:
-            raise ValueError("The DefaultTargets attribute must be defined")
 
     def remove_labels(self):
         """
