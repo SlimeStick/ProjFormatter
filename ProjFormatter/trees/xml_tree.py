@@ -1,8 +1,11 @@
+from typing import Iterable
+
+from defusedxml import ElementTree
+from lxml import etree
+
 from ProjFormatter.utils.element_utils import get_children, is_empty_element, get_child_count, \
     are_elements_of_same_type, \
     merge_children, are_relevant_elements
-from defusedxml import ElementTree
-from lxml import etree
 
 
 class XMLTree:
@@ -21,7 +24,7 @@ class XMLTree:
         self.namespace = self.namespace.split('{')[1]
 
     @classmethod
-    def __convert_to_lxml(cls, elem):
+    def __convert_to_lxml(cls, elem: ElementTree):
         """
         Recursively convert a defusedxml element to an lxml element.
         """
@@ -52,11 +55,11 @@ class XMLTree:
             doctype="<?xml version=\"1.0\" encoding=\"utf-8\"?>",
         ).decode('utf-8')
 
-    def save_to_file(self, output_path):
+    def save_to_file(self, output_path: str):
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(str(self))
 
-    def remove_attributes(self, attribute_names: list[str]):
+    def remove_attributes(self, attribute_names: Iterable[str]):
         """
         Removes specified attributes from all nodes in the XML tree.
         """
@@ -68,9 +71,9 @@ class XMLTree:
                 if attribute in element.attrib:
                     del element.attrib[attribute]
 
-    def remove_empty_elements(self, element_names: list):
+    def remove_empty_elements(self, element_names: Iterable):
         """"
-        Removes an element if it has no tags and no content and is in the element_names list.
+        Removes an element if it has no tags and no content and is in the element_names iterable.
         Does not remove all empty elements because empty elements can have the meaning of resetting an attribute.
         """
         for parent in self.root.iter():
@@ -79,7 +82,7 @@ class XMLTree:
                     parent.remove(child)
 
     @classmethod
-    def __merge_elements_of_same_type(cls, root):
+    def __merge_elements_of_same_type(cls, root: ElementTree):
         for child in get_children(root):
             cls.__merge_elements_of_same_type(child)
 

@@ -38,7 +38,7 @@ class VCXProjTree(XMLTree):
                 if not "Configuration" in grandchild_tags:
                     raise ValueError("ProjectConfiguration must a Configuration child")
 
-    def get_project_configurations(self):
+    def get_project_configurations(self) -> list[str]:
         project_configurations = []
         for element in LevelOrderTraverser(self.root, 2):
             if element.tag == 'ProjectConfiguration':

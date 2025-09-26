@@ -2,6 +2,8 @@ from collections import deque
 from dataclasses import dataclass
 from typing import Any, Optional
 
+from defusedxml import ElementTree
+
 
 @dataclass
 class TreeNodeWithDepth:
@@ -15,7 +17,7 @@ class LevelOrderTraverser:
     Each node in the tree is expected to be iterable over its children.
     """
 
-    def __init__(self, root, depth: Optional[int] = None):
+    def __init__(self, root: ElementTree, depth: Optional[int] = None):
         """
         :param root: The root node of the tree. Must be iterable to access children.
         :param depth: If specified, only nodes at this depth (0-based) will be returned.

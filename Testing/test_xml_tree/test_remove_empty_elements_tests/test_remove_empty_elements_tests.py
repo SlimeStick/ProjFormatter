@@ -4,6 +4,7 @@ from ProjFormatter.trees.xml_tree import XMLTree
 
 TEST_DIR = os.path.dirname(__file__)
 
+
 def test_sanity_remove_empty_elements():
     xml_tree = XMLTree(os.path.join(TEST_DIR, 'test_sanity_remove_empty_elements_files/input.xml'))
 

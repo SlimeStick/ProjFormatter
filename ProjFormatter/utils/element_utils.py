@@ -1,13 +1,14 @@
 import re
+from typing import Sequence, Iterable
 
 from defusedxml import ElementTree
 
 
-def get_child_count(element):
+def get_child_count(element: ElementTree) -> int:
     return len(element)
 
 
-def get_children(element):
+def get_children(element: ElementTree) -> Sequence[ElementTree]:
     return list(element)
 
 
@@ -22,19 +23,19 @@ def is_empty_element(element: ElementTree) -> bool:
     return True
 
 
-def transfer_children(source, destination):
+def transfer_children(source: ElementTree, destination: ElementTree):
     children = get_children(source)
     for child in children:
         source.remove(child)
         destination.append(child)
 
 
-def merge_children(root, source, destination):
+def merge_children(root: ElementTree, source: ElementTree, destination: ElementTree):
     transfer_children(source, destination)
     root.remove(source)
 
 
-def are_elements_equal(elements: list[ElementTree]) -> bool:
+def are_elements_equal(elements: Sequence[ElementTree]) -> bool:
     first = elements[0]
     first_tostring = ElementTree.tostring(first)
 
@@ -50,11 +51,12 @@ def copy_element(element: ElementTree) -> ElementTree:
     return ElementTree.fromstring(ElementTree.tostring(element))
 
 
-def are_elements_of_same_type(element1, element2):
+def are_elements_of_same_type(element1: ElementTree, element2: ElementTree) -> bool:
     return element1.attrib == element2.attrib and element1.tag == element2.tag
 
 
-def are_relevant_elements(element1, element2, configurations=None, platforms=None):
+def are_relevant_elements(element1: ElementTree, element2: ElementTree, configurations: Iterable[str] = None,
+                          platforms: Iterable[str] = None):
     """
     Returns whether either element can affect the other.
     Currently, doesn't evaluate XML properties so it's best-effort based on known cases of the Condition attribute.

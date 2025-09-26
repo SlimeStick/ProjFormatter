@@ -10,7 +10,8 @@ def test_sanity_merge_elements_of_same_type():
 
     xml_tree.merge_elements_of_same_type()
 
-    with open(os.path.join(TEST_DIR, 'test_sanity_merge_elements_of_same_type_files/expected_outcome.xml'), 'r') as file:
+    with open(os.path.join(TEST_DIR, 'test_sanity_merge_elements_of_same_type_files/expected_outcome.xml'),
+              'r') as file:
         expected_outcome = file.read()
 
     assert expected_outcome == str(xml_tree)

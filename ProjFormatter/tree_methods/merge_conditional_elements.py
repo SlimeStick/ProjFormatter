@@ -1,5 +1,5 @@
 import itertools
-from typing import Any
+from typing import Sequence, Iterable, Any
 from xml.etree.ElementTree import Element
 
 from defusedxml import ElementTree
@@ -9,9 +9,9 @@ from ProjFormatter.utils.element_utils import get_children, get_child_count, are
     copy_element
 
 
-def _generate_subgroups_as_lists(lst: list[Any]) -> list[tuple[Any, ...]]:
+def _generate_subgroups_as_lists(lst: Sequence[Any]) -> list[tuple[Any, ...]]:
     """
-    Generate all possible subsets of the input list that contain at least two elements.
+    Generate all possible subsets of the input sequence that contain at least two elements.
     """
     subgroups = []
     for r in range(2, len(lst) + 1):
@@ -19,14 +19,15 @@ def _generate_subgroups_as_lists(lst: list[Any]) -> list[tuple[Any, ...]]:
     return subgroups
 
 
-def _merge_conditions(elements_with_conditions: list[ElementTree]):
+def _merge_conditions(elements_with_conditions: Iterable[ElementTree]):
     conditions = set([element.attrib["Condition"] for element in elements_with_conditions])
     conditions_strings = ["({})".format(condition) for condition in conditions]
     return " || ".join(conditions_strings)
 
 
-def _merge_top_group(children_to_merge: list[ElementTree]) -> ElementTree:
-    merged_element = Element(children_to_merge[0].tag, attrib=_merge_conditions(children_to_merge))
+def _merge_top_of_group(children_to_merge: Sequence[ElementTree]) -> ElementTree:
+    merged_element = Element(children_to_merge[0].tag, attrib=children_to_merge[0].attrib)
+    merged_element.attrib["Condition"] = _merge_conditions(children_to_merge)
 
     grandchild_index = 0
 
@@ -58,7 +59,7 @@ def _should_merge_elements(element1: ElementTree, element2: ElementTree) -> bool
         dicts_equal_ignore_keys(element1.attrib, element2.attrib, ["Condition"])
 
 
-def merge_conditional_elements(root):
+def merge_conditional_elements(root: ElementTree):
     """
     What it does is find a group of subsequent elements that are all the same type but different conditions, meaning
     that no two elements in the group can exist at the same time.

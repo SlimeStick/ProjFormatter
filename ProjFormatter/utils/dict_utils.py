@@ -1,7 +1,7 @@
-from typing import Any, Dict
+from typing import Any, Dict, Iterable
 
 
-def dicts_equal_ignore_keys(dict1: Dict[Any, Any], dict2: Dict[Any, Any], keys_to_ignore: Any) -> bool:
+def dicts_equal_ignore_keys(dict1: Dict[Any, Any], dict2: Dict[Any, Any], keys_to_ignore: Iterable[Any]) -> bool:
     """
     Returns whether two dictionaries are equal, not including the keys to ignore.
     """
