@@ -129,6 +129,7 @@ class MSBuildTree(XMLTree):
         """
         self._merge_conditional_elements(self.root)
     def format_once(self):
+        super().format_once()
         self.remove_labels()
         self.format_conditions()
         # TODO: Improve removal so that it doesn't recursively remove all elements but removes them using a context
