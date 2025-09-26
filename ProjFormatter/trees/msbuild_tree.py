@@ -46,7 +46,7 @@ class MSBuildTree(XMLTree):
     def _merge_conditions(cls, elements_with_conditions: Iterable[ElementTree]):
         conditions = OrderedSet([element.attrib["Condition"] for element in elements_with_conditions])
         conditions_strings = ["({})".format(condition) for condition in conditions]
-        return " || ".join(conditions_strings)
+        return " Or ".join(conditions_strings)
 
     @classmethod
     def _merge_side_of_group(cls, children_to_merge: Sequence[ElementTree], top: bool) -> Optional[ElementTree]:
