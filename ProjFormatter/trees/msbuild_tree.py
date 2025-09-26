@@ -91,7 +91,7 @@ class MSBuildTree(XMLTree):
             dicts_equal_ignore_keys(element1.attrib, element2.attrib, ["Condition"])
 
     @classmethod
-    def _merge_children(cls, root, current_children_to_merge, child_index):
+    def _merge_children(cls, root: ElementTree, current_children_to_merge: list[Element], child_index: int):
         if len(current_children_to_merge) > 1:
             for subgroup in generate_subgroups_as_lists(current_children_to_merge):
                 top_merged_element = cls._merge_side_of_group(subgroup, True)
@@ -128,3 +128,13 @@ class MSBuildTree(XMLTree):
         Creates a merged element before and after each merge group.
         """
         self._merge_conditional_elements(self.root)
+    def format_once(self):
+        self.remove_labels()
+        self.format_conditions()
+        # TODO: Improve removal so that it doesn't recursively remove all elements but removes them using a context
+        #   So for example it won't remove all ImportGroup elements because that may mean something else in a special
+        #   context of a tag we don't know about. Instead remove only ImportGroups that appear inside a Project tag.
+        self.remove_empty_elements(["PropertyGroup", "ImportGroup", "ItemDefinitionGroup", "ClCompile", "Link",
+                                    "ItemGroup"])
+        self.merge_elements_of_same_type()
+        self.merge_conditional_elements()

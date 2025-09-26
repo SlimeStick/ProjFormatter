@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from typing import Iterable
 
 from defusedxml import ElementTree
@@ -7,7 +8,7 @@ from ProjFormatter.utils.element_utils import get_children, is_empty_element, ge
     are_elements_of_same_type, merge_children, are_mutually_exclusive
 
 
-class XMLTree:
+class XMLTree(ABC):
     def __init__(self, file_path: str):
         self.tree = ElementTree.parse(file_path)
         self.root = self.tree.getroot()
@@ -109,3 +110,22 @@ class XMLTree:
 
     def merge_elements_of_same_type(self):
         self.__merge_elements_of_same_type(self.root)
+
+    @abstractmethod
+    def format_once(self):
+        """
+        Runs a formatting routine once.
+        This routine may make other optimizations possible so it may need to be run again.
+        """
+        raise NotImplementedError()
+
+    def format(self):
+        """
+        Runs a formatting routine again and again until no optimizations happen between format routines.
+        """
+        while True:
+            state_before_format = ElementTree.tostring(self.root)
+            self.format_once()
+            state_after_format = ElementTree.tostring(self.root)
+            if state_before_format == state_after_format:
+                break
