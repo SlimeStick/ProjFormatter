@@ -13,7 +13,7 @@ class VCXProjTree(MSBuildTree):
         if "DefaultTargets" not in self.root.attrib:
             raise ValueError("The DefaultTargets attribute must be defined")
 
-    def check_include_sanity(self):
+    def check_include_elements(self):
         """
         Checks that the Include attributes in all elements don't contain macro usages.
         """
@@ -131,7 +131,7 @@ class VCXProjTree(MSBuildTree):
         super().check_format_sanity()
 
         # TODO: Understand how many projects have $ in include statements
-        self.check_include_sanity()
+        self.check_include_elements()
         self.check_project_configuration_elements()
         self.check_project_configuration_combinations()
         self.check_import_elements()
