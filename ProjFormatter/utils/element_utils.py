@@ -61,7 +61,7 @@ def are_mutually_exclusive(element1: ElementTree, element2: ElementTree) -> bool
     """
     :return: whether two elements are mutually exclusive by their Condition attribute.
     :note: Doesn't evaluate most conditions, so many elements that aren't actually mutually exclusive get treated as
-        such. For example: Condition="'$(Platform)'=='x64'" and Condition="$(Platform)!='Win32" usually mean the same
+        such. For example: Condition="'$(Platform)'=='x64'" and Condition="$(Platform)!='Win32'" usually mean the same
         thing and are not mutually exclusive, but this function treats them as such because it does not know all
         possible values of Platform.
     """
