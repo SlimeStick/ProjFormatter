@@ -5,6 +5,20 @@ from ProjFormatter.trees.msbuild_tree import MSBuildTree
 TEST_DIR = os.path.dirname(__file__)
 
 
+def test_optimize_conditions_all_possible_values_false():
+    msbuild_tree = MSBuildTree(
+        os.path.join(TEST_DIR, 'test_optimize_conditions_all_possible_values_false/input.xml'))
+
+    msbuild_tree.optimize_conditions(possible_values={"Platform": ["x64", "Win32"]})
+
+    with open(os.path.join(TEST_DIR,
+                           'test_optimize_conditions_all_possible_values_false/expected_outcome.xml'),
+              'r') as file:
+        expected_outcome = file.read()
+
+    assert expected_outcome == str(msbuild_tree)
+
+
 def test_optimize_conditions_all_possible_values_known_expand_not_equals():
     msbuild_tree = MSBuildTree(
         os.path.join(TEST_DIR, 'test_optimize_conditions_all_possible_values_known_expand_not_equals/input.xml'))
@@ -27,6 +41,20 @@ def test_optimize_conditions_all_possible_values_known_redundant_not_equals():
 
     with open(os.path.join(TEST_DIR,
                            'test_optimize_conditions_all_possible_values_known_redundant_not_equals/expected_outcome.xml'),
+              'r') as file:
+        expected_outcome = file.read()
+
+    assert expected_outcome == str(msbuild_tree)
+
+
+def test_optimize_conditions_all_possible_values_true():
+    msbuild_tree = MSBuildTree(
+        os.path.join(TEST_DIR, 'test_optimize_conditions_all_possible_values_true/input.xml'))
+
+    msbuild_tree.optimize_conditions(possible_values={"Platform": ["x64", "Win32"]})
+
+    with open(os.path.join(TEST_DIR,
+                           'test_optimize_conditions_all_possible_values_true/expected_outcome.xml'),
               'r') as file:
         expected_outcome = file.read()
 
