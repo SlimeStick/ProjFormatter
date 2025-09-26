@@ -137,5 +137,4 @@ class MSBuildTree(XMLTree):
         #   context of a tag we don't know about. Instead remove only ImportGroups that appear inside a Project tag.
         self.remove_empty_elements(["PropertyGroup", "ImportGroup", "ItemDefinitionGroup", "ClCompile", "Link",
                                     "ItemGroup"])
-        self.merge_elements_of_same_type()
         self.merge_conditional_elements()
