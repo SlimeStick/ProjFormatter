@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <A Condition="'$(Platform)'='x64' || '$(Platform)'='Win32'">
+  <A Condition="('$(Platform)'=='x64') || ('$(Platform)'=='Win32')">
     <B>b</B>
   </A>
-  <A Condition="'$(Platform)'='x64'">
+  <A Condition="'$(Platform)'=='x64'">
     <C>c</C>
   </A>
-  <A Condition="'$(Platform)'='Win32'">
+  <A Condition="'$(Platform)'=='Win32'">
     <D>d</D>
   </A>
-  <A Condition="'$(Platform)'='x64' || '$(Platform)'='Win32'">
+  <A Condition="('$(Platform)'=='x64') || ('$(Platform)'=='Win32')">
     <F>f</F>
   </A>
 </Project>

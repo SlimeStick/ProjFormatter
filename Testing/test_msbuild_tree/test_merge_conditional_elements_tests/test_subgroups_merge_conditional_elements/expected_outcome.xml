@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <A Condition="'$(Platform)'='x64' || '$(Platform)'='Win32' || '$(Configuration)'='Release'">
+  <A Condition="'$(Platform)'=='x64' || '$(Platform)'=='Win32' || '$(Configuration)'=='Release'">
     <C>c</C>
   </A>
-  <A Condition="'$(Platform)'='x64' || '$(Platform)'='Win32' || '$(Configuration)'='Debug'">
+  <A Condition="'$(Platform)'=='x64' || '$(Platform)'=='Win32' || '$(Configuration)'=='Debug'">
     <B>b</B>
   </A>
-  <A Condition="'$(Platform)'='x64' || '$(Configuration)'='Debug'">
+  <A Condition="'$(Platform)'=='x64' || '$(Configuration)'=='Debug'">
     <D>d</D>
   </A>
-  <A Condition="'$(Platform)'='x64' || '$(Configuration)'='Release'">
+  <A Condition="'$(Platform)'=='x64' || '$(Configuration)'=='Release'">
     <E>e</E>
   </A>
-  <A Condition="'$(Platform)'='Win32' || '$(Configuration)'='Debug'">
+  <A Condition="'$(Platform)'=='Win32' || '$(Configuration)'=='Debug'">
     <F>f</F>
   </A>
-  <A Condition="'$(Platform)'='Win32' || '$(Configuration)'='Release'">
+  <A Condition="'$(Platform)'=='Win32' || '$(Configuration)'=='Release'">
     <G>g</G>
   </A>
 </Project>
