@@ -95,7 +95,7 @@ def merge_conditional_elements(root: ElementTree):
     </A>
 
     And this is done for each subgroup too, not just the largest group, so out of a group of 4 we could get conditions
-    that are relevant only in 3 conditionals. Can that then break stuff? errmmm.......
+    that are relevant only in 3 conditionals. Can that then break stuff.......? not sure.
 
     So like let's say I have this case:
     <A Condition="'$(Platform)'='x64' || '$(Configuration)'='Debug'">
@@ -139,7 +139,7 @@ def merge_conditional_elements(root: ElementTree):
     where it was?
     I think it must start again only if the merge deleted items, because then the subgroups are invalidated.
 
-    If no items were deleted it could continue and then find the next subgroup which is x64Debug and Win32Debug and then do:
+    If no items were deleted, it could continue and then find the next subgroup which is x64Debug and Win32Debug and then do:
 
     <A Condition="'$(Platform)'='x64' || '$(Platform)'='Win32' || '$(Configuration)'='Release'">
         <C>c</C>
@@ -160,7 +160,7 @@ def merge_conditional_elements(root: ElementTree):
         <G>g</G>
     </A>
 
-    And of course, if it knows that the only possible Platform values are x64 and Win32 it can remove that condition:
+    And of course, if it knows that the only possible Platform values are x64 and Win32, it can remove that condition:
 
     <A Condition="''$(Configuration)'='Release'">
         <C>c</C>

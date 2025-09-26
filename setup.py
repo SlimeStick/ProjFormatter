@@ -1,4 +1,5 @@
 import os
+
 import setuptools
 
 with open(os.path.join("README.md"), mode="r") as readme_file:

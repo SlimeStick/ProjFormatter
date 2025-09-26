@@ -59,7 +59,8 @@ def are_relevant_elements(element1: ElementTree, element2: ElementTree, configur
                           platforms: Iterable[str] = None):
     """
     Returns whether either element can affect the other.
-    Currently, doesn't evaluate XML properties so it's best-effort based on known cases of the Condition attribute.
+    Currently, it doesn't evaluate XML properties,
+    so it's best-effort based on known cases of the Condition attribute.
     """
     if configurations is None:
         configurations = ["Debug", "Release"]

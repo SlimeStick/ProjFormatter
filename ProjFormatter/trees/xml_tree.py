@@ -18,7 +18,7 @@ class XMLTree:
         """
         Remove the namespace prefix from all tags in the tree.
         """
-        # Braces cannot be used in XML element names so it's safe to split using them to get the namespace
+        # Braces cannot be used in XML element names, so it's safe to split using them to get the namespace
         for element in self.root.iter():
             self.namespace, element.tag = element.tag.split('}')
         self.namespace = self.namespace.split('{')[1]
