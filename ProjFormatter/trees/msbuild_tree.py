@@ -1,8 +1,8 @@
 from typing import Sequence, Iterable, Optional
 from xml.etree.ElementTree import Element
-from ordered_set import OrderedSet
 
 from defusedxml import ElementTree
+from ordered_set import OrderedSet
 
 from ProjFormatter.trees.xml_tree import XMLTree
 from ProjFormatter.utils.dict_utils import dicts_equal_ignore_keys

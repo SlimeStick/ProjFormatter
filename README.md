@@ -1,3 +1,2 @@
-ProjFormatter is an open source CLI tool for formatting *proj files such as vcxproj, csproj, vcxproj.filters.
-It works by either receiving a proj path and formatting that file or by receiving a sln path and formatting all proj files references in it.
-In the future it may be available as a visual studio extension.
+ProjFormatter is a CLI tool for formatting MSbuild XML files.
+It currently supports formatting vcxproj and props files.
