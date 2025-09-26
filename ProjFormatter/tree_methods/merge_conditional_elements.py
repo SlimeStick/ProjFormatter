@@ -4,7 +4,7 @@ from xml.etree.ElementTree import Element
 
 from defusedxml import ElementTree
 
-from ProjFormatter.utils.dict_utils import dicts_equal_ignore_key
+from ProjFormatter.utils.dict_utils import dicts_equal_ignore_keys
 from ProjFormatter.utils.element_utils import get_children, get_child_count, are_relevant_elements, are_elements_equal, \
     copy_element
 
@@ -55,7 +55,7 @@ def _merge_top_group(children_to_merge: list[ElementTree]) -> ElementTree:
 
 def _should_merge_elements(element1: ElementTree, element2: ElementTree) -> bool:
     return element1.tag == element2.tag and not are_relevant_elements(element1, element2) and \
-        dicts_equal_ignore_key(element1.attrib, element2.attrib, "Condition")
+        dicts_equal_ignore_keys(element1.attrib, element2.attrib, ["Condition"])
 
 
 def merge_conditional_elements(root):
