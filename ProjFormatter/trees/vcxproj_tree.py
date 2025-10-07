@@ -1,12 +1,17 @@
 from ProjFormatter.tree_traversers.level_order_traversal import LevelOrderTraverser
-from ProjFormatter.trees.msbuild_tree import MSBuildTree
+from ProjFormatter.trees.msbuild_tree import MSBuildTree, MSBuildTreeFormattingConfiguration
 from ProjFormatter.utils.element_utils import get_children
 
 
+class VCXProjTreeFormattingConfiguration(MSBuildTreeFormattingConfiguration):
+    def __init__(self, remove_labels: bool = True):
+        super().__init__(remove_labels)
+
 class VCXProjTree(MSBuildTree):
-    def __init__(self, file_path: str):
-        super().__init__(file_path)
-        self.check_format_sanity()
+    def __init__(self, file_path: str,
+                 format_configuration: VCXProjTreeFormattingConfiguration = VCXProjTreeFormattingConfiguration()):
+        super().__init__(file_path, format_configuration)
+        VCXProjTree.check_format_sanity(self)
 
     def check_root_node(self):
         super().check_root_node()

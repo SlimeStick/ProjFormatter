@@ -10,10 +10,17 @@ from ProjFormatter.utils.element_utils import get_child_count, are_elements_equa
 from ProjFormatter.utils.math_utils import generate_subgroups_as_lists
 
 
+class MSBuildTreeFormattingConfiguration:
+    def __init__(self, remove_labels: bool):
+        self.remove_labels = remove_labels
+
+
 class MSBuildTree(XMLTree):
-    def __init__(self, file_path: str):
+    def __init__(self, file_path: str,
+                 format_configuration: MSBuildTreeFormattingConfiguration = MSBuildTreeFormattingConfiguration()):
         super().__init__(file_path)
-        self.check_format_sanity()
+        MSBuildTree.check_format_sanity(self)
+        self.format_configuration = format_configuration
 
     def check_format_sanity(self):
         self.check_root_node()
@@ -128,9 +135,11 @@ class MSBuildTree(XMLTree):
         Creates a merged element before and after each merge group.
         """
         self._merge_conditional_elements(self.root)
+
     def format_once(self):
         super().format_once()
-        self.remove_labels()
+        if self.format_configuration.remove_labels:
+            self.remove_labels()
         self.format_conditions()
         # TODO: Improve removal so that it doesn't recursively remove all elements but removes them using a context
         #   So for example it won't remove all ImportGroup elements because that may mean something else in a special
