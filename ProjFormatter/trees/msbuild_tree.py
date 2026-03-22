@@ -1,8 +1,10 @@
+import re
 from typing import Sequence, Iterable, Optional
 from xml.etree.ElementTree import Element
 
 from defusedxml import ElementTree
 from ordered_set import OrderedSet
+from sympy import simplify_logic
 
 from ProjFormatter.trees.xml_tree import XMLTree
 from ProjFormatter.utils.dict_utils import dicts_equal_ignore_keys
@@ -128,13 +130,103 @@ class MSBuildTree(XMLTree):
         Creates a merged element before and after each merge group.
         """
         self._merge_conditional_elements(self.root)
+
+    @classmethod
+    def expand_single_not_equal(
+            cls,
+            match: re.Match[str],
+            possible_values: dict[str, list[str]] | None,
+    ) -> str:
+        """
+        Expand one '!=' expression into an equivalent 'Or' chain of '=='.
+
+        Example:
+            "'$(Platform)'!='Win32'"
+            with possible_values={"Platform": ["x64", "Win32", "ARM"]}
+
+            -> "'$(Platform)'=='x64' Or '$(Platform)'=='ARM'"
+        """
+        expression = match.group(0).strip()
+
+        # Extract variable and excluded value
+        parsed = re.match(r"'?\$\(([^)]+)\)'?\s*!=\s*'?(.*?)'?$", expression)
+        if not parsed:
+            return expression
+
+        variable, excluded_value = parsed.groups()
+
+        # If no possible values known, leave as-is
+        if not possible_values or variable not in possible_values:
+            return expression
+
+        # Build allowed values in original order
+        allowed_values = [
+            value for value in possible_values[variable] if value != excluded_value
+        ]
+        if not allowed_values:
+            return "False"
+
+        expanded = [f"'$({variable})'=='{val}'" for val in allowed_values]
+        return "(" + " Or ".join(expanded) + ")"
+
+    @classmethod
+    def _expand_not_equal(cls, condition: str, possible_values: dict[str, list[str]] | None) -> str:
+        """
+        Expand != into Or of == using known possible values of variables.
+        """
+        # Keep expanding until no more known !=
+        previous = None
+        current = condition
+
+        while previous != current:
+            previous = current
+            current = re.sub(
+                r"'[^']*'\s*!=\s*'[^']*'",
+                lambda m: cls.expand_single_not_equal(m, possible_values),
+                current,
+            )
+
+        return current
+
+
+    @classmethod
+    def _optimize_condition(cls, condition: str, possible_values: dict[str, list[str]] | None = None) -> str:
+        # Steps:
+        # 1. If has possible_values, replace != with list of Ors of ==
+        # 2. Convert all ==, !=, Or, And to SymPy symbols
+        # 3. Start loop of:
+        #   a. Call SymPy simplify
+        #   b. Convert to z3
+        #   c. Look for tautologies and contradictions in every part of the expression
+        #   d. Convert back to SymPy
+        # 4. Convert from SymPy back to msbuild strings
+        if possible_values:
+            condition = cls._expand_not_equal(condition, possible_values)
+        sympy_boolean = _msbuild_string_to_sympy_boolean(condition)
+        simplified_condition = simplify_logic(sympy_boolean)
+        return _sympy_boolean_to_msbuild_string(simplified_condition)
+
+    def optimize_conditions(self, possible_values: dict[str, list[str]] | None = None):
+        """
+        Optimizes elements' Condition attribute.
+
+        :param possible_values: A dict of known possible values for known variables.
+            If a variable isn't in this dictionary, it's treated as if it can hold any value.
+        """
+        for element in self.root.iter():
+            if "Condition" not in element.attrib:
+                continue
+            element.attrib["Condition"] = self._optimize_condition(element.attrib["Condition"],
+                                                                   possible_values=possible_values)
+
     def format_once(self):
         super().format_once()
-        self.remove_labels()
-        self.format_conditions()
         # TODO: Improve removal so that it doesn't recursively remove all elements but removes them using a context
         #   So for example it won't remove all ImportGroup elements because that may mean something else in a special
         #   context of a tag we don't know about. Instead remove only ImportGroups that appear inside a Project tag.
         self.remove_empty_elements(["PropertyGroup", "ImportGroup", "ItemDefinitionGroup", "ClCompile", "Link",
                                     "ItemGroup"])
+        self.remove_labels()
+        self.format_conditions()
         self.merge_conditional_elements()
+        self.optimize_conditions()
