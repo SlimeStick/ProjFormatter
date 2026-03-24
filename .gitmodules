@@ -1,0 +1,3 @@
+[submodule "Dependencies/pyvcproj"]
+	path = Dependencies/pyvcproj
+	url = git@github.com:jhandley/pyvcproj.git
